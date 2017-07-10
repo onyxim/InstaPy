@@ -393,7 +393,7 @@ After strike this command, you can access your bot by VNC on the adress  `localh
 
 But there is more! There is fully accessible bash console with all code mounted at the path `/code`. When you hack some files they are dynamically updated inside your container.
 
-To access yor container console to run bot type `localhost:22` in your favorite ssh client.
+To access yor container console to run bot type `localhost:22` in your favorite ssh client. The User is `root` and the password is `root` also.
 
 #### Run in production without opened VNC port
 
