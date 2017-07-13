@@ -70,6 +70,8 @@ class InstaPy:
         self.like_by_followers_upper_limit = 0
         self.like_by_followers_lower_limit = 0
 
+        self.global_time_intervals = {}
+
         self.aborting = False
 
         if selenium_local_session:
@@ -266,51 +268,53 @@ class InstaPy:
         self.like_by_followers_lower_limit = limit or 0
         return self
 
+    # todo прописать метод для установки глобальных интервалов работы парсера.
+    def set_global_time_intervals(self, intervals={}):
+        if self.aborting:
+            return self
+
+        for day_code, intervals_for_day in intervals:
+            if day_code ==
+
+
+        return self
+
     def like_by_locations(self, locations=None, amount=50, media=None):
         """Likes (default) 50 images per given locations"""
         if self.aborting:
             return self
 
-        liked_img = 0
-        already_liked = 0
-        inap_img = 0
-        commented = 0
-        followed = 0
+        links = self.get_links(locations, tags_type=True, amount=amount, media=media)
+        self.do_actions_for_links(links)
 
-        locations = locations or []
-
-        for index, location in enumerate(locations):
-            print('Location [{}/{}]'.format(index + 1, len(locations)))
-            print('--> {}'.format(location.encode('utf-8')))
-            self.logFile.write('Location [{}/[]]'.format(index + 1, len(locations)))
-            self.logFile.write('--> {}\n'.format(location.encode('utf-8')))
-
-            try:
-                links = get_links_for_location(self.browser, location, amount, media)
-            except NoSuchElementException:
-                print('Too few images, aborting')
-                self.logFile.write('Too few images, aborting\n')
-
-                self.aborting = True
-                return self
-
-            self.do_actions_for_links(links)
+        return self
 
     def like_by_tags(self, tags=None, amount=50, media=None):
         """Likes (default) 50 images per given tag"""
         if self.aborting:
             return self
 
-        tags = tags or []
+        links = self.get_links(tags, tags_type=True, amount=amount, media=media)
+        self.do_actions_for_links(links)
 
-        for index, tag in enumerate(tags):
-            print('Tag [{}/{}]'.format(index + 1, len(tags)))
-            print('--> {}'.format(tag.encode('utf-8')))
-            self.logFile.write('Tag [{}/[]]'.format(index + 1, len(tags)))
-            self.logFile.write('--> {}\n'.format(tag.encode('utf-8')))
+        return self
+
+    def get_links(self, queue_for_likes=[], tags_type=False, locations_type=False, amount=50, media=None):
+        if tags_type and not locations_type:
+            type_label = 'Tag'
+        elif not tags_type and locations_type:
+            type_label = 'Location'
+        for index, member in enumerate(queue_for_likes):
+            print(type_label + ' [{}/{}]'.format(index + 1, len(queue_for_likes)))
+            print('--> {}'.format(member.encode('utf-8')))
+            self.logFile.write(type_label + ' [{}/[]]'.format(index + 1, len(queue_for_likes)))
+            self.logFile.write('--> {}\n'.format(member.encode('utf-8')))
 
             try:
-                links = get_links_for_tag(self.browser, tag, amount, media)
+                if tags_type and not locations_type:
+                    links = get_links_for_tag(self.browser, member, amount, media)
+                elif not tags_type and locations_type:
+                    links = get_links_for_location(self.browser, member, amount, media)
             except NoSuchElementException:
                 print('Too few images, aborting')
                 self.logFile.write('Too few images, aborting\n')
@@ -318,34 +322,7 @@ class InstaPy:
                 self.aborting = True
                 return self
 
-            self.do_actions_for_links(links)
-
-        return self
-
-    def like_by_list(self, tags=[], locations=[]):
-        if self.aborting:
-            return self
-
-        tags = tags or []
-
-        for index, tag in enumerate(tags):
-            print('Tag [{}/{}]'.format(index + 1, len(tags)))
-            print('--> {}'.format(tag.encode('utf-8')))
-            self.logFile.write('Tag [{}/[]]'.format(index + 1, len(tags)))
-            self.logFile.write('--> {}\n'.format(tag.encode('utf-8')))
-
-            try:
-                links = get_links_for_tag(self.browser, tag, amount, media)
-            except NoSuchElementException:
-                print('Too few images, aborting')
-                self.logFile.write('Too few images, aborting\n')
-
-                self.aborting = True
-                return self
-
-            self.do_actions_for_links(links)
-
-        return self
+        return links
 
     def do_actions_for_links(self, links={}):
         if self.aborting:
