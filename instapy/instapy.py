@@ -36,8 +36,6 @@ class InstaPy:
             self.display.start()
 
         self.browser = None
-        if selenium_local_session:
-            self.set_selenium_local_session()
 
         self.logFile = open('./logs/logFile.txt', 'a')
 
@@ -74,25 +72,39 @@ class InstaPy:
 
         self.aborting = False
 
+        if selenium_local_session:
+            self.set_selenium_local_session()
+
     def set_selenium_local_session(self):
+        """Starts local session for a selenium server. Default case scenario."""
+        if self.aborting:
+            return self
+
         chromedriver_location = './assets/chromedriver'
         chrome_options = Options()
         chrome_options.add_argument('--dns-prefetch-disable')
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--lang=en-US')
         chrome_options.add_experimental_option('prefs', {'intl.accept_languages': 'en-US'})
-        chrome_options.binary_location = chromedriver_location
         self.browser = webdriver.Chrome(chromedriver_location, chrome_options=chrome_options)
         self.browser.implicitly_wait(25)
         self.logFile.write('Session started - %s\n' \
                            % (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
+        return self
+
     def set_selenium_remote_session(self, selenium_url=''):
+        """Starts remote session for a selenium server. Useful for docker setup."""
+        if self.aborting:
+            return self
+
         self.browser = webdriver.Remote(command_executor=selenium_url,
                                         desired_capabilities=DesiredCapabilities.CHROME)
         self.browser.maximize_window()
         self.logFile.write('Session started - %s\n' \
                            % (datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+
+        return self
 
     def login(self):
         """Used to login the user either with the username and password"""
@@ -523,6 +535,9 @@ class InstaPy:
     def like_by_feed(self, amount):
         """Like the users feed"""
 
+        if self.aborting:
+            return self
+
         # go to feeds page
         self.browser.get('https://www.instagram.com')
 
@@ -533,6 +548,8 @@ class InstaPy:
                 sleep(3)
             except:
                 print('Unable to perform Like')
+
+        return self
 
     def end(self):
         """Closes the current session"""

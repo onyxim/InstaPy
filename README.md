@@ -366,7 +366,7 @@ That's all! At this step you are already successfully run you personal bot!
 
 ### 3. See what your bot do right now 
 
-Run yout VNC viewer, and type adress and port `localhost:5900`. The password is `secret`.
+Run your VNC viewer, and type adress and port `localhost:5900`. The password is `secret`.
 
 ### 4. Stop your instapy bot
 
@@ -409,7 +409,7 @@ docker-compose -f docker-prod.yml up -d
 
 First you need to build the image by running this in the Terminal:
 ```bash
-docker build -t instapy ./docker_conf/all_in_one
+docker build -t instapy ./docker_conf/all_in_one/Dockerfile
 ```
 
 Make sure to use the `nogui` feature:
