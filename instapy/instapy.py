@@ -17,7 +17,7 @@ from .like_util import get_links_for_location
 from .like_util import like_image
 from .login_util import login_user
 from .print_log_writer import log_follower_num
-from .time_util import sleep
+from .time_util import sleep, Schedule
 from .unfollow_util import unfollow
 from .unfollow_util import follow_user
 from .unfollow_util import follow_given_user
@@ -70,7 +70,7 @@ class InstaPy:
         self.like_by_followers_upper_limit = 0
         self.like_by_followers_lower_limit = 0
 
-        self.global_time_intervals = {}
+        self.global_run_schedule = False
 
         self.aborting = False
 
@@ -269,13 +269,11 @@ class InstaPy:
         return self
 
     # todo прописать метод для установки глобальных интервалов работы парсера.
-    def set_global_time_intervals(self, intervals={}):
+    def set_global_run_schedule(self, schedule={}):
         if self.aborting:
             return self
 
-        for day_code, intervals_for_day in intervals:
-            if day_code ==
-
+        self.global_run_schedule = Schedule(schedule)
 
         return self
 
