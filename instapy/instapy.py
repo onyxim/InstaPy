@@ -277,12 +277,15 @@ class InstaPy:
 
         return self
 
+    def calculate_speed(self):
+        pass
+
     def like_by_locations(self, locations=None, amount=50, media=None):
         """Likes (default) 50 images per given locations"""
         if self.aborting:
             return self
 
-        links = self.get_links(locations, tags_type=True, amount=amount, media=media)
+        links = self.get_links(locations, locations_type=True, amount=amount, media=media)
         self.do_actions_for_links(links)
 
         return self
