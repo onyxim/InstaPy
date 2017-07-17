@@ -50,6 +50,7 @@ class Schedule(object):
     # todo write this function
     # todo write logical optional operator fo this function
     def check_moment_in_ranges(self, moment=arrow.get()):
+        """Return True when passed date in schedule ranges for the of the passed date"""
         day = moment.isoweekday()
         for range in self.machine_schedule[day]:
             if range[0] < moment.time() < range[1]:
@@ -57,5 +58,9 @@ class Schedule(object):
         return False
 
     def sum_all_time(self, moment=arrow.get()):
+        pass
+
+    def get_time_to_start_stop(self, moment=arrow.get()):
+        """Return start and stop time for current time range"""
         pass
 

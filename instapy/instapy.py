@@ -45,6 +45,7 @@ class InstaPy:
 
         self.do_comment = False
         self.comment_percentage = 0
+        self.comment_day_limit = False
         self.comments = ['Cool!', 'Nice!', 'Looks good!']
         self.photo_comments = []
         self.video_comments = []
@@ -54,9 +55,11 @@ class InstaPy:
         self.follow_times = 1
         self.do_follow = False
         self.follow_percentage = 0
+        self.follow_day_limit = 900
         self.dont_include = []
         self.automatedFollowedPool = []
 
+        self.like_day_limit = 900
         self.dont_like = ['sex', 'nsfw']
         self.ignore_if_contains = []
         self.ignore_users = []
@@ -69,6 +72,12 @@ class InstaPy:
 
         self.like_by_followers_upper_limit = 0
         self.like_by_followers_lower_limit = 0
+
+        # Min and max technical timeout interval in seconds for like, follow and comment. When you are not blocked with guaranty.
+        self.like_timeout_limit = [28,36]
+        self.follow_timeout_limit = [28, 38]
+        self.comment_timeout_limit = [350, 400]
+
 
         self.global_run_schedule = False
 
