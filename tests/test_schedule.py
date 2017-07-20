@@ -4,11 +4,14 @@ from ..instapy.time_util import Schedule
 import json
 import arrow
 import time
+import os
 
 
 class TestSchedule(unittest.TestCase):
     def setUp(self):
-        json_file = open('/code/instabot/bot_settings.json', encoding='utf-8')
+        my_path = os.path.abspath(os.path.dirname(__file__))
+        json_path = os.path.join(my_path, "test_schedule.json")
+        json_file = open(json_path, encoding='utf-8')
         settings = json.load(json_file)
         self.schedule = Schedule(settings["schedule"])
 
@@ -20,4 +23,5 @@ class TestSchedule(unittest.TestCase):
         print(self.schedule.schedule)
 
     def test_get_time_to_start_stop(self):
-        test_datetime = arrow.get(2017, 7, 14, 13, 0, 0)
+        test_datetime = arrow.get(2017, 7, 14, 4, 0, 0)
+        print(self.schedule.get_time_to_start_stop(test_datetime))
