@@ -62,5 +62,17 @@ class Schedule(object):
 
     def get_time_to_start_stop(self, moment=arrow.get()):
         """Return start and stop time for current time range"""
-        pass
+        day = moment.isoweekday()
+        # Ranges for a day
+        ranges = self.machine_schedule[day].copy()
+        for n in enumerate(ranges):
+            if moment.time() < ranges[n][0]:
+                start = 0
+                stop = ranges[n][1] - moment.time()
+            if ranges[n][0] < moment.time() < ranges[n][1]:
+                # Start right now. The moment is within ranges.
+                start = 0
+                stop = ranges[n][1] - moment.time()
+            elif ranges[n][0]
 
+        return start, stop
