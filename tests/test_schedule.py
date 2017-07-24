@@ -5,6 +5,7 @@ import json
 import arrow
 import time
 import os
+import schedule
 
 
 class TestSchedule(unittest.TestCase):
